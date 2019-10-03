@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="container">
+<div class="row justify-content-center align-self-center">
+        <h1> Form</h1>
+          </div>
+            
+<div class="border border-primary rounded-lg  raw  p-2 " >
+<p>    
+    <form action="" method="POST" enctype="multipart/form-data">
+        <div class="form-group ">
+            {% csrf_token %}
+                {{ form.as_ul }}
+    <input type="submit" value="send">
+
+</div>
+    </form>
+</p>
+</div>
+</div>
+{% endblock %}

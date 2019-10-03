@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <div class="row justify-content-center align-self-center">
+  <h1> List</h1>
+    </div>
+      
+
+    <div class="container ">
+        <form method="GET" action="">
+            <input type="text" name='q' placeholder='search posts'/>
+            <input type='submit' value='search'/>
+        </form>
+     
+            {% for i in obj %}
+            <div class="border border-primary rounded-lg  raw  p-2 ">
+            <h1> 
+            <a href="{{ i.get_absolute_url }}">{{ i.title }}</a>
+            
+           <!--
+                {% url 'detail' slug=i.slug %}
+                /posts/{{ i.id }} -->
+            </h1> <br/>
+            {% if i.draft %}
+            <p style={color:red}>Draft</p>
+            {% endif %}
+
+            {% if i.user.get_full_name %}
+            <p>Author:{{ i.user.get_full_name }}</p><br/>
+            {% endif %}
+                {% if i.image %}
+                <img src="{{ i.image.url }}" class="img-responsive" 
+                style="width: 100px ;height:100px; float: left; margin-right: 10px;" /> <br/>
+                {% endif %}<br/>
+
+                {{ i.content }}<br/>
+                {{ i.timestamp }}<br/>
+                {{ i.updated }}<br/>
+
+                <form action="" method="POST">
+                        <a class="bg-bg-secondary" href=" {% url 'delete' id=i.id %}">Delete</a>
+                        <a class="bg-bg-secondary" href=" {% url 'update' slug=i.slug %}">update</a>
+
+                </form>
+        </div>
+        
+       
+            {% endfor %}
+        </div>
+        
+
+
+
+
+<div class="pagination">
+        <span class="step-links">
+            {% if obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ obj.previous_page_number }}
+                {% if request.Get.q %}& q={{ request.GET.q }} {% endif %}">previous</a>
+            {% endif %}
+    
+            <span class="current">
+                Page {{ obj.number }} of {{ obj.paginator.num_pages }}.
+            </span>
+    
+            {% if obj.has_next %}
+                <a href="?page={{ obj.next_page_number }}{% if request.Get.q %}& q={{ request.GET.q }} {% endif %}">next</a>
+                <a href="?page={{ obj.paginator.num_pages }}{% if request.Get.q %}& q={{ request.GET.q }} {% endif %}">last &raquo;</a>
+            {% endif %}
+        </span>
+</div>
+
+    </div>
+ {% endblock %}

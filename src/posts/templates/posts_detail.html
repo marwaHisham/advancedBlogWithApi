@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block head_extra %} 
+{{ form.media }}
 
+{% endblock head_extra %}
 
 {% block content %}
 {% load static %}
@@ -22,7 +26,7 @@
 
         <div class="border border-primary rounded-lg ">
 
-        <div class="raw">
+        <div class="raw ">
                 <div class="col-sm-12">
 
                 
@@ -41,13 +45,80 @@ style="width: 10%; float: left; margin-right: 10px;" />
 {% endif %}
 {{ obj.timestamp|timesince }}<br/>
 
-<p>
-    {{ share_string|cut:"%20" }}
 
-  
-    {{ obj.content |linebreaks|truncatechars:120 }}<br/>
+     
+        <div class='row'>
+                <div class='col-sm-12 '>
+                
+                   <div class='content-markdown'>{{ obj.content }}</div>               
+                    <hr/>
+                    <br/>
+                    <!--<div class="fb-comments" data-href="{{ request.build_absolute_uri }}" data-numposts="5">
+                    -->
+                 </div>
+                
+        </div>
+<!--{{ obj.comments.all }}-->
+<p class='lead'>  comments    </p>
+{% if request.user.is_authenticated %}
+        <form action="" method="POST" enctype="multipart/form-data">
+                    <div class="row ">
+                        {% csrf_token %}
+                        {{ comment_form|crispy }}
+                       <input type="submit" value="post comment"  class="btn btn-primary">
+                    </div>
+                </form>
+                {% else %}
+                <p>you must login  </p>
+                {% endif %}
+{% for i in comments  %} 
+        <blockquote >
+                       
+                    {{ i.content }}<br/>
+                    <footer> 
+                   <B style="color:black;"> via: </B>{{ i.user }} 
+                
+                   <B style="color:blake;"> On: </B>{{ i.timestamp }}
+                   {% if i.user == usernow %}
+                   <a href="  /comments/delete/{{ i.id }}">delete</a>
+                   {% endif %}
 
-</p>
+            </h1> <br/>
+            {{i.id}}
+                   {% if i.children.count > 0 %} 
+                       {{ i.children.count }} comments
+                   {% endif %}
+                   <a href="#" class="comment-reply-btn" > replies:</a>|
+                   <a href="{{ i.get_get_absolute_url }}" class="" > thread:</a>
+                   <br/>
+                    <footer>
+
+            <div class="comment-reply"   >
+                {% for child in i.children %}
+
+                   <blockquote >         
+                     {{ child.content }}<br/>
+                    <B style="color:black;"> via: </B>{{ i.user }} <B style="color:blake;"> On: </B>{{ i.timestamp }}<br/>             
+                    </blockquote >
+                 {% endfor %}
+                           
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        <div class="row ">
+                            {% csrf_token %}
+                                {{ comment_form|crispy }}
+                        <input type='hidden' name='parent_id' value='{{ i.id }} '>
+                        <input type="submit" value="reply comment"  class="btn btn-primary">
+                
+                      </div>
+                    </form>
+
+            </div>
+         
+        </blockquote>
+{% endfor %}
+            <!--
+            
+
 
 <a href="https://www.facebook.com/sharer/sharer.php?u= {{ request.build_absolute_uri }}/">
     Facebook
@@ -63,15 +134,16 @@ title={{ obj.title }}&
 summary={{ share_string }}
 &source={{ request.build_absolute_uri }}/">
      Linkedin
-    </a>
+    </a>-->
 
 <!--<img src="{% static 'img/gis/move_vertex_off.svg' %}" alt="My image">-->
 </span>
 </div>
+<!--
 <div class="fb-like" data-href="https://developers.facebook.com/docs/plugins/" data-width="" data-layout="button" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div></div>
 <div class="fb-comments" data-href="https://developers.facebook.com/docs/plugins/comments#configurator" data-width="" data-numposts="5"></div>
 </div>
-
+-->
 </body>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

@@ -2,54 +2,57 @@
 
 
 {% block content %}
-    <div class="row justify-content-center align-self-center">
-  <h1> List</h1>
-    </div>
-      
+    
 
-    <div class="container ">
-        <form method="GET" action="">
-            <input type="text" name='q' placeholder='search posts'/>
-            <input type='submit' value='search'/>
+<div class="container  ">
+    <div class="row justify-content-center align-self-center">
+        <h1> List</h1>
+    </div>
+    <div class="form-inline">
+        <form  method="GET" action="">
+              <input class="form-control mr-sm-2" type="text" name='q' placeholder='search posts'>
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">search<i class="fa fa-search"></i></button>
         </form>
-     
-            {% for i in obj %}
-            <div class="border border-primary rounded-lg  raw  p-2 ">
-            <h1> 
-            <a href="{{ i.get_absolute_url }}">{{ i.title }}</a>
-            
+    </div>
+  
+    {% for i in obj %}
+        <div class="border border-primary rounded-lg  raw  p-2 ">
+            <h1> <a href="{% url 'detail' slug=i.slug %}">{{ i.title }}</a>
            <!--
                 {% url 'detail' slug=i.slug %}
                 /posts/{{ i.id }} -->
             </h1> <br/>
-            {% if i.draft %}
+        {% if i.draft %}
             <p style={color:red}>Draft</p>
-            {% endif %}
+        {% endif %}
 
-            {% if i.user.get_full_name %}
+        {% if i.user.get_full_name %}
             <p>Author:{{ i.user.get_full_name }}</p><br/>
-            {% endif %}
-                {% if i.image %}
-                <img src="{{ i.image.url }}" class="img-responsive" 
+        {% endif %}
+
+        {% if i.image %}
+            <img src="{{ i.image.url }}" class="img-responsive" 
                 style="width: 100px ;height:100px; float: left; margin-right: 10px;" /> <br/>
-                {% endif %}<br/>
+        {% endif %}<br/>
 
-                {{ i.content }}<br/>
-                {{ i.timestamp }}<br/>
-                {{ i.updated }}<br/>
-
-                <form action="" method="POST">
-                        <a class="bg-bg-secondary" href=" {% url 'delete' id=i.id %}">Delete</a>
-                        <a class="bg-bg-secondary" href=" {% url 'update' slug=i.slug %}">update</a>
-
-                </form>
-        </div>
-        
+        <p class='content-markdown'>{{ i.content|truncatechars:120 }} </p><br/>
+        {{ i.timestamp }}<br/>
+        {{ i.updated }}<br/>
        
-            {% endfor %}
-        </div>
-        
 
+        <div class='caption post-detail-item'>
+             <p class=''>==={{ i.get_markdown }}</p>
+        </div>
+
+        <form action="" method="POST">
+            <p>
+                <a class="btn btn-primary"  href=" {% url 'delete' id=i.id %}" role="button"  >  Delete </a>
+                <a class="btn btn-primary" href=" {% url 'update' slug=i.slug %}" role="button" > update  </a>
+            </p>           
+        </form>
+    {% endfor %}
+</div>
+        
 
 
 

@@ -1,50 +1,18 @@
 from django import forms
 
+from pagedown.widgets import PagedownWidget
 
 from .models import Post
 
 
 class PostForm(forms.ModelForm):
-    # title       = forms.CharField(label='', 
-    #                  widget=forms.TextInput(attrs={"placeholder": "Your title"}))
-    # content = forms.CharField(
-    #                     required=False, 
-    #                     widget=forms.Textarea(
-    #                         attrs={
-    #                                 "placeholder": "Your description",
-    #                                  "class": "new-class-name two",
-    #                                 "id": "my-id-for-textarea",
-    #                              "rows": 20,
-    #                                 'cols': 120                             }
-    #                          )
-    #                      )
-    # price       = forms.DecimalField(initial=199.99)
-    
+    publish = forms.DateField(widget=forms.SelectDateWidget)
     class Meta:
         model = Post
         fields = [
-            'title',
-            'image',
-            'draft',
-            'content',
-           'publish'
-         
-            
+            "title",
+            "content",
+            "image",
+            "draft",
+            "publish",
         ]
-
-
-# class RawProductForm(forms.Form):
-#     title       = forms.CharField(label='', widget=forms.TextInput(attrs={"placeholder": "Your title"}))
-#     description = forms.CharField(
-#                         required=False, 
-#                         widget=forms.Textarea(
-#                                 attrs={
-#                                     "placeholder": "Your description",
-#                                     "class": "new-class-name two",
-#                                     "id": "my-id-for-textarea",
-#                                     "rows": 20,
-#                                     'cols': 120
-#                                 }
-#                             )
-#                         )
-#     price       = forms.DecimalField(initial=199.99)

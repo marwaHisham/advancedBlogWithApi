@@ -1,12 +1,19 @@
 from __future__ import unicode_literals
 
 from django.conf import settings
+
 from django.db import models
-from django.core.urlresolvers import reverse
-#from django.urls import reverse
+#from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
 from django.utils import timezone
+from markdown_deux import markdown
+from django.utils.safestring import mark_safe
+from comments.models import Comment
+from django.contrib.contenttypes.models import ContentType
+
+
 
 
 class PostManager(models.Manager):
@@ -30,9 +37,9 @@ class Post (models.Model):
     image = models.ImageField(upload_to=upload_location,
         null = True , blank=True, 
         width_field="width_field",height_field="height_field")
-    content= models.TextField()
+    content= models.TextField(default='this is content')
     draft=models.BooleanField(default= False)
-    publish = models.DateTimeField(default=timezone.now)
+    publish = models.DateField(default=timezone.now)
     updated=models.DateTimeField(auto_now=True ,auto_now_add=False)
     timestamp=models.DateTimeField(auto_now=False ,auto_now_add=True)
 
@@ -53,7 +60,23 @@ class Post (models.Model):
     class Meta:
         ordering = ['timestamp']
 
+    def markdown(self):
+        content=self.content
+        return  mark_safe( markdown(content))
 
+
+    @property
+    def comments(self):
+        instance=self
+        qs=Comment.objects.filter_by_instace(instance)
+        return qs
+
+    @property
+    def get_content_type(self):
+        instance=self
+        content_type=ContentType.objects.get_for_model(instance.__class__)
+        return content_type
+    
 
 def create_slug(instance , new_slug=None):
     slug=slugify(instance.title)

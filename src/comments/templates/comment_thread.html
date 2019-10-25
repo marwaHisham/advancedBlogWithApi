@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block head_extra %} 
+{{ form.media }}
+
+{% endblock head_extra %}
+{% load static %}
+{% load urlify %}
+{% block content %}
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.1.0/bootstrap.min.js"></script>
+
+<div class="container container-table">
+    <div class="row vertical-center-row">
+            
+        {{ obj.content }}</h4><br/><hr>
+        <footer> 
+
+        <B style="color:black;"> via: </B>{{ obj.user }} 
+        <B style="color:blake;"> On: </B>{{ obj.timestamp }}
+        {% if obj.children.count > 0 %} 
+            {{ obj.children.count }} comments
+            
+        {% endif %}
+        <a href="  /comments/delete/{{ obj.id }}">delete</a>    
+        <br/>        
+       
+
+        <footer>
+
+    <div>
+     {% for child in obj.children %}
+
+        <blockquote >         
+            {{ child.content }}<br/>
+        <B style="color:black;"> via: </B>{{ obj.user }} <B style="color:blake;"> 
+            On: </B>{{ obj.timestamp }}
+            {{ child.id }}
+            <br/>             
+    </blockquote >
+        {% endfor %}
+                
+        <form action="" method="POST" enctype="multipart/form-data">
+            <div class="row ">
+                {% csrf_token %}
+                    {{ form|crispy }}
+            <input type='hidden' name='parent_id' value='{{ obj.id }} '>
+            <input type="submit" value="reply comment"  class="btn btn-primary">
+    
+            </div>
+        </form>
+
+</div>
+</div>
+</div>
+{% endblock %}

@@ -1,20 +1,66 @@
-<!doctype html>
+
+{% load staticfiles %}
+<!--DOCTYPE html -->
 <html>
-    <head>
-         
-                    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-            
-                        <link rel='stylesheet' ,  href='/static/css/styles.css'/>
-                        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-               
-        <title>coding </title>
+<head>
+        <title>{% block head_title %}Advancing the Blog{% endblock head_title %}</title>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+        
+
+        <link rel='stylesheet' href='{% static "css/styles.css" %}' />
+        <link rel='stylesheet'href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'/>
+        <style>
+        {% block style %}{% endblock style %}
+        </style>
+        {% block head_extra %} {% endblock head_extra %}
+
     </head>
     <body>
         {% include 'nav.html' %}
         {% block content %} 
             replace me
         {% endblock %}
-    </body>  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+
+   <!-- Latest compiled and minified JavaScript -->
+<script   src="http://code.jquery.com/jquery-1.12.2.min.js"   integrity="sha256-lZFHibXzMHo3GGeehn1hudTAP3Sc0uKXBXAzHX1sjtk="   crossorigin="anonymous"></script>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js'></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $(".content-markdown").each(function(){
+            var content = $(this).text()
+            console.log(content)
+            var markedContent = marked(content)
+            console.log(markedContent)
+            $(this).html(markedContent)
+    })
+    $(".post-detail-item img").each(function(){
+        $(this).addClass("img-responsive")
+    })
+
+    $(".comment-reply-btn").click(function(event){
+       event.preventDefault()
+       $(this).parent().find(".comment-reply").fadeToggle( "slow", "linear" );
+
+       /*$( ".comment-reply" ).first().fadeToggle( "slow", "linear" );*/
+
+    })
+    
+})
+
+
+
+</script>
+
+</body>  
 </html>

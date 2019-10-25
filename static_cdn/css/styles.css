@@ -1,11 +1,20 @@
-h1 {
-    color: #777777;
-    font-family: verdana;
-    font-size: 200%;
-}
-
-p {
-    color: #766765;
-    font-family: courier;
-    font-size: 150%;
-}
+            h1 {
+                color: #777777;
+                font-family: verdana;
+                font-size: 200%;
+            }
+            
+            p {
+                color: #766765;
+                font-family: courier;
+                font-size: 150%;
+            }
+            
+            .wmd-panel {
+                margin-left: 0px !important;
+                margin-right: 0px !important;
+            }
+            
+            .comment-reply {
+                display: none;
+            }
